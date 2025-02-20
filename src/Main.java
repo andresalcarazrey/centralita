@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -137,7 +138,7 @@ public class Main {
         System.out.println("Desea buscar por origen (1) o por destinatario (2)");
         int opcion = leerValorInt();
         boolean bDestinatario = (opcion==2);
-        Llamada[] encontradas = e.buscarLlamada(nombre,bDestinatario);
+        List<Llamada> encontradas = e.buscarLlamada(nombre,bDestinatario);
         if(encontradas==null) {
             System.out.println("No hay ninguna llamada con " + nombre + " de destinatario == " + bDestinatario);
         } else {

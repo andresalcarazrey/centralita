@@ -1,4 +1,4 @@
-public class Persona {
+public class Persona implements Comparable<Persona> {
 
     // Esta clase es POJO (pequeña y no contenedora). No cambia
 
@@ -45,5 +45,10 @@ public class Persona {
                 ", sEmail='" + sEmail + '\'' +
                 ", sDni='" + sDni + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Persona aP) {
+        return (this.getsApellidos()+this.getsNombre()).compareTo(aP.getsApellidos()+aP.getsNombre());
     }
 }

@@ -1,8 +1,6 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List; //importante: el IDE os pone el import
-                        // de manera automática. Pero fijaros,
+import java.lang.reflect.Array;
+import java.util.*;
+// de manera automática. Pero fijaros,
                         //estamos usando API Java.
 
 public class Entidad {
@@ -97,7 +95,7 @@ public class Entidad {
         }
         return false;*/
         //Al principio es más difícil de imaginar
-        listaLL.removeIf(n -> n.getId()==id); //SOLO UNA LINEA WOW!!!!
+        return listaLL.removeIf(n -> n.getId()==id); //SOLO UNA LINEA WOW!!!!
 
 
 
@@ -131,103 +129,64 @@ public class Entidad {
         //Crear una copia es buena idea para no dejar la lista original
         //en manos de nadie
 
-        //La edad me puede ya...
-        //Arrays.asList es interesante también, cuando tenemos
-        //que convertir una array puro y duro en List
-
-        //Yo os dejaré siempre, al igual que en las empresas
-        //Que consultéis las clases, interfaces de API Java
-        //Eso sí, hay que tener los conceptos claros
-
-        //Así no usamos ARRAYS. Que se me había pasado cambiarlo arriba en
-        //la declaración.
-
-        //Os voy a subir este código a repositorio para que lo clonéis,
-        //Y arregléis vosotros los demás métodos del CRUD
 
 
-
-
-
-
-        /*
-        Llamada[] nuevaCopiaMala = new Llamada[listaLL.length];
-        Llamada[] copiaBuena;
-
-        int llamadasEncontradas = 0;
-        for(int i =0;i<listaLL.length;i++) {
-            if(listaLL[i]!=null) {
-                nuevaCopiaMala[llamadasEncontradas] = listaLL[i];
-                llamadasEncontradas++;
-            }
-        }
-
-        copiaBuena = new Llamada[llamadasEncontradas];
-        for(int i=0;i<llamadasEncontradas;i++) {
-            copiaBuena[i] = nuevaCopiaMala[i];
-        }
-        return copiaBuena;
-
-         */
     }
 
-    public  Llamada[] listarUrgentes() {
-        Llamada[] nuevaCopiaMala = new Llamada[listaLL.length];
-        Llamada[] copiaBuena;
-
-        int llamadasEncontradas = 0;
-        for(int i =0;i<listaLL.length;i++) {
-            if(listaLL[i]!=null && listaLL[i].isbUrgente()) {
-                nuevaCopiaMala[llamadasEncontradas] = listaLL[i];
-                llamadasEncontradas++;
+    public  List<Llamada> listarUrgentes() {
+        ArrayList<Llamada> listaUrgentes = new ArrayList<>();
+        for(Llamada ll:listaLL) {
+            if(ll.isbUrgente()){
+                listaUrgentes.add(ll);
             }
         }
-
-        copiaBuena = new Llamada[llamadasEncontradas];
-        for(int i=0;i<llamadasEncontradas;i++) {
-            copiaBuena[i] = nuevaCopiaMala[i];
-        }
-        return copiaBuena;
+        return listaUrgentes;
     }
 
     public  Llamada buscarLlamada(long id) {
-        for(int i =0;i<listaLL.length;i++) {
-            if(listaLL[i].getId()==id) {
-                return listaLL[i];
+        for(Llamada ll:listaLL)  {
+            if(ll.getId()==id) {
+                return ll;
             }
         }
         return null;
     }
 
-    public Llamada[] buscarLlamada(String nombre, boolean bDestinatario) {
+    public List<Llamada> buscarLlamada(String nombre, boolean bDestinatario) {
 
-        Llamada[] resultado = new Llamada[listaLL.length];
-        int encontradas=0;
-        for(int i =0;i<listaLL.length;i++) {
+        List<Llamada> resultadoList = new ArrayList<>();
+        for(Llamada ll:listaLL) {
+            Persona p;
             if(bDestinatario) {
-                if(listaLL[i].getDestino().getsNombre().compareTo(nombre)==0) {
-                    resultado[encontradas] = listaLL[i];
-                    encontradas++;
-                }
+                p = ll.getDestino();
             } else {
-                if(listaLL[i].getOrigen().getsNombre().compareTo(nombre)==0) {
-                    resultado[encontradas] = listaLL[i];
-                    encontradas++;
-                }
+                p = ll.getOrigen();
 
             }
-        }
 
-        Llamada[] bueno = new Llamada[encontradas];
-        for(int i=0;i<encontradas;i++) {
-            bueno[i] = resultado[i];
+            if(p.getsNombre().equals(nombre)) {
+                resultadoList.add(ll);
+            }
         }
-
-        return bueno;
+        return resultadoList;
     }
 
     public boolean estaLlamada(long id) {
         return (this.buscarLlamada(id)!=null);
+    }
+
+    public List<Persona> getAllPersonas() {
+        Map<String,Persona> mapaPersonas = new HashMap<>();
+
+        for (Llamada ll:this.listaLL) {
+            mapaPersonas.put(ll.getOrigen().getsDni(),ll.getOrigen());
+            mapaPersonas.put(ll.getDestino().getsDni(),ll.getDestino());
+
+        }
+        ArrayList<Persona> resultado = new ArrayList<Persona>(mapaPersonas.values());
+        Collections.sort(resultado);
+        return resultado;
+
     }
 
 
