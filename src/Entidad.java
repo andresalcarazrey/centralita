@@ -175,7 +175,7 @@ public class Entidad {
         return (this.buscarLlamada(id)!=null);
     }
 
-    public List<Persona> getAllPersonas() {
+    public List<Persona> getAllPersonas(Comparator<Persona> comparador) {
         Map<String,Persona> mapaPersonas = new HashMap<>();
 
         for (Llamada ll:this.listaLL) {
@@ -184,7 +184,14 @@ public class Entidad {
 
         }
         ArrayList<Persona> resultado = new ArrayList<Persona>(mapaPersonas.values());
-        Collections.sort(resultado);
+
+        if (comparador==null) {
+            //Ordenación natural. Persona, tiene que ser comparable
+            Collections.sort(resultado);
+        } else {
+            //Ordenación externa. El comparador se encarga de hacer el trabajo duro
+            resultado.sort(comparador);
+        }
         return resultado;
 
     }

@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,8 +27,11 @@ public class Main {
         System.out.println("1. Dar de alta una llamada");
         System.out.println("2. Dar de baja una llamada");
         System.out.println("3. Listar todas las llamadas");
-        System.out.println("4. Listar llamadas atención urgente");
-        System.out.println("5. Buscar una llamada por destinatario");
+        System.out.println("4. Listar todas las Personas. Por Apellidos-Nombre");
+        System.out.println("5. Listar todas las Personas. Por email");
+        System.out.println("6. Listar todas las Personas. Por dni");
+        System.out.println("7. Listar llamadas atención urgente");
+        System.out.println("8. Buscar una llamada por destinatario");
         System.out.println("--------------------------------");
     }
 
@@ -63,9 +67,15 @@ public class Main {
                 break;
             case 3: listarTodas(e);
                 break;
-            case 4: listarUrgentes(e);
+            case 4: listarPersonasApeNombre(e);
                 break;
-            case 5: buscarLlamada(e);
+            case 5: listarPersonasEmail(e);
+                break;
+            case 6: listarPersonasDni(e);
+                break;
+            case 7: listarUrgentes(e);
+                break;
+            case 8: buscarLlamada(e);
                 break;
             case 0:
                 System.out.println("Saliendo...");
@@ -114,7 +124,7 @@ public class Main {
         switch (opcion) {
             case 1: buscarPorId(e);
                 break;
-            case 2: buscarPorNombre();
+            case 2: buscarPorNombre(e);
                 break;
             default:
                 System.out.println("Opción no válida");
@@ -148,4 +158,56 @@ public class Main {
             }
         }
     }
+
+    private static void listarPersonasApeNombre(Entidad e) {
+        System.out.println(".................\nPersonas x Apellidos-Nombre:\n..............");
+        for(Persona p: e.getAllPersonas(null) ) {
+            System.out.println(p.toString());
+        }
+    }
+
+    private static void listarPersonasEmail(Entidad e) {
+        System.out.println(".................\nPersonas x Email:\n..............");
+        for(Persona p: e.getAllPersonas(new ComparatorPersonaEmail()) ) {
+            System.out.println(p.toString());
+        }
+    }
+
+    private static void listarPersonasDni(Entidad e) {
+        System.out.println(".................\nPersonas x Dni:\n..............");
+        for(Persona p: e.getAllPersonas( new Comparator<Persona>() {
+                @Override
+                public int compare(Persona p1, Persona p2) {
+                    return p1.getsDni().compareTo(p2.getsDni());
+                }
+            })) {
+            System.out.println(p.toString());
+        }
+    }
+
+    private static void listarPersonasApellidosNombreEmail(Entidad e) {
+        System.out.println(".................\nPersonas x Dni:\n..............");
+        for(Persona p: e.getAllPersonas(  new Comparator<Persona>() {
+            @Override
+            public int compare(Persona p1, Persona p2) {
+                return p1.getsDni().compareTo(p2.getsDni());
+            }
+        })) {
+            System.out.println(p.toString());
+        }
+    }
+
+    private static void listarPersonasTelefono(Entidad e) {
+        System.out.println(".................\nPersonas x Teléfono:\n..............");
+        for(Persona p: e.getAllPersonas(new Comparator<Persona>() {
+            @Override
+            public int compare(Persona p1, Persona p2) {
+                return p1.getsTelefono().compareTo(p2.getsTelefono());
+            }
+        })) {
+            System.out.println(p.toString());
+        }
+    }
+
+
 }
