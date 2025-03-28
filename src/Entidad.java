@@ -49,7 +49,16 @@ public class Entidad {
                 "nombre='" + nombre + '\'' +
                 ", id='" + id + '\'' +
                 ", direccion='" + direccion + '\'' +
-                '}';
+                mostrarLlamadas() +
+                "}\n";
+    }
+
+    private String mostrarLlamadas() {
+        String resultado="";
+        for (Llamada ll:this.listaLL) {
+            resultado+=ll.toString();
+        }
+        return resultado;
     }
 
 
@@ -194,6 +203,21 @@ public class Entidad {
         }
         return resultado;
 
+    }
+
+
+    public List<Persona> getAllPersonas() {
+        Map<String,Persona> mapaPersonas = new HashMap<>();
+
+        for (Llamada ll:this.listaLL) {
+            mapaPersonas.put(ll.getOrigen().getsDni(),ll.getOrigen());
+            mapaPersonas.put(ll.getDestino().getsDni(),ll.getDestino());
+
+        }
+        ArrayList<Persona> resultado = new ArrayList<Persona>(mapaPersonas.values());
+        Collections.sort(resultado);
+
+        return resultado;
     }
 
 

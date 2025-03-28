@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -32,6 +35,7 @@ public class Main {
         System.out.println("6. Listar todas las Personas. Por dni");
         System.out.println("7. Listar llamadas atención urgente");
         System.out.println("8. Buscar una llamada por destinatario");
+        System.out.println("9. Grabar entidad centralita a disco");
         System.out.println("--------------------------------");
     }
 
@@ -77,12 +81,28 @@ public class Main {
                 break;
             case 8: buscarLlamada(e);
                 break;
+            case 9: grabarADisco(e);
+                break;
             case 0:
                 System.out.println("Saliendo...");
                 break;
             default:
                 System.out.println(("Opción no válida"));
 
+        }
+    }
+
+    private static void grabarADisco(Entidad e) {
+        String nombreFichero = "entidad.data";
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new FileWriter(nombreFichero));
+            out.println(e.toString());
+        } catch (IOException excepcion) {
+            System.out.println("Atención importante: No se ha podido grabar. Problema de sistema");
+            System.out.println(excepcion.getMessage());
+        } finally {
+            if (out!=null) out.close();
         }
     }
 

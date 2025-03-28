@@ -74,7 +74,7 @@ public class Llamada {
                 ", bUrgente=" + bUrgente +
                 ", horaMinutos='" + horaMinutos + '\'' +
                 ", fecha='" + fecha + '\'' +
-                '}';
+                "}\n";
     }
 
 

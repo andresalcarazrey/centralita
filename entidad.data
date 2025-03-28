@@ -1,0 +1,8 @@
+Entidad{nombre='Ayuntamiento', id='3', direccion='Call alta 34'Llamada{origen=Persona{sNombre='Andrew', sApellidos='Alcarew', sTelefono='654654654', sEmail='aa@yo.com', sDni='12312312A'}
+, destino=Persona{sNombre='Rubew', sApellidos='Almogiew', sTelefono='677688699', sEmail='elrubius@yo.com', sDni='34343434S'}
+, bUrgente=true, horaMinutos='12:40', fecha='30/01/2025'}
+Llamada{origen=Persona{sNombre='Samu', sApellidos='Eldesiempre', sTelefono='644644644', sEmail='samu@yo.com', sDni='12312312E'}
+, destino=Persona{sNombre='JF', sApellidos='Mulargos', sTelefono='611651112', sEmail='jf@jf.com', sDni='43434343I'}
+, bUrgente=false, horaMinutos='13:56', fecha='12/12/2024'}
+}
+
