@@ -1,3 +1,5 @@
+package model;
+
 public class Persona implements Comparable<Persona> {
 
     // Esta clase es POJO (pequeña y no contenedora). No cambia

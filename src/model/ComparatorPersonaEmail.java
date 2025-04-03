@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Comparator;
 
 public class ComparatorPersonaEmail implements Comparator<Persona> {

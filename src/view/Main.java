@@ -1,3 +1,11 @@
+package view;
+
+import controller.Controlador;
+import model.ComparatorPersonaEmail;
+import model.Entidad;
+import model.Llamada;
+import model.Persona;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,14 +21,13 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         int opcion;
         //Vista
-        Entidad ayuntamientoMalaga = new Entidad(leerValor("Nombre de la entidad"),leerValor("Id de la entidad"),leerValor("Dirección de la entidad"));
-
+        Controlador.getSingleton().setData(leerValor("Nombre de la entidad"),leerValor("Id de la entidad"),leerValor("Dirección de la entidad"));
 
         do {
             mostrarMenu();
             System.out.println("Introduzca la opción a realizar (0 salir)");
             opcion = leerValorInt();
-            realizarOpcion(opcion,ayuntamientoMalaga);
+            realizarOpcion(opcion);
         } while(opcion!=0);
     }
 
@@ -63,25 +70,25 @@ public class Main {
         return (new Scanner(System.in)).nextBoolean();
     }
 
-    public static void realizarOpcion(int opcion, Entidad e) {
+    public static void realizarOpcion(int opcion) {
         switch (opcion) {
-            case 1: altaLlamada(e);
+            case 1: altaLlamada();
                 break;
-            case 2: bajaLlamada(e);
+            case 2: bajaLlamada();
                 break;
-            case 3: listarTodas(e);
+            case 3: listarTodas();
                 break;
-            case 4: listarPersonasApeNombre(e);
+            case 4: listarPersonasApeNombre();
                 break;
-            case 5: listarPersonasEmail(e);
+            case 5: listarPersonasEmail();
                 break;
-            case 6: listarPersonasDni(e);
+            case 6: listarPersonasDni();
                 break;
-            case 7: listarUrgentes(e);
+            case 7: listarUrgentes();
                 break;
-            case 8: buscarLlamada(e);
+            case 8: buscarLlamada();
                 break;
-            case 9: grabarADisco(e);
+            case 9: grabarADisco();
                 break;
             case 0:
                 System.out.println("Saliendo...");
@@ -92,12 +99,12 @@ public class Main {
         }
     }
 
-    private static void grabarADisco(Entidad e) {
+    private static void grabarADisco() {
         String nombreFichero = "entidad.data";
         PrintWriter out = null;
         try {
             out = new PrintWriter(new FileWriter(nombreFichero));
-            out.println(e.toString());
+            out.println(Controlador.getSingleton().getEntidadString());
         } catch (IOException excepcion) {
             System.out.println("Atención importante: No se ha podido grabar. Problema de sistema");
             System.out.println(excepcion.getMessage());
@@ -106,55 +113,55 @@ public class Main {
         }
     }
 
-    public static void altaLlamada(Entidad e) {
+    public static void altaLlamada() {
         //Vamos a coger los datos de la llamada
         Llamada ll = new Llamada(leerValor("Fecha (dd/mm/aaaa):"),leerValor("Hora (hh:mm);"),leerValorBoolean("Urgente?"),leerPersona(),leerPersona());
-        if (e.altaLlamada(ll)) {
+        if (Controlador.getSingleton().altaLlamada(ll)) {
             System.out.println("Llamada creada correctamente");
         } else {
             System.out.println("Hay un problema de almacenamiento o la llamada no se ha podido crear (error interno). \nConsulte con Administrador del sistema");
         }
     }
 
-    public static void bajaLlamada(Entidad e) {
+    public static void bajaLlamada() {
         System.out.println("Introduzca el Id de la llamada:");
         long id = leerValorLong();
-        if(e.bajaLlamada(id)) {
+        if(Controlador.getSingleton().bajaLlamada(id)) {
             System.out.println("llamada eliminada OK");
         } else {
             System.out.println("La llamada" + id + " no se encuentra");
         }
     }
-    public static void listarTodas(Entidad e) {
+    public static void listarTodas() {
         System.out.println(".................\nLlamadas activas:\n..............");
-        for(Llamada ll: e.listarTodas()) {
+        for(Llamada ll: Controlador.getSingleton().listarTodas()) {
             System.out.println(ll.toString());
         }
 
     }
-    public static void listarUrgentes(Entidad e) {
+    public static void listarUrgentes() {
         System.out.println(".................\nLlamadas urgentes:\n..............");
-        for(Llamada ll: e.listarUrgentes()) {
+        for(Llamada ll: Controlador.getSingleton().listarUrgentes()) {
             System.out.println(ll.toString());
         }
     }
-    public static void buscarLlamada(Entidad e) {
+    public static void buscarLlamada() {
         System.out.println("Desea buscar por Id o por nombre?: (1 para Id, 2 para buscar por nombre)");
         int opcion = leerValorInt();
         switch (opcion) {
-            case 1: buscarPorId(e);
+            case 1: buscarPorId();
                 break;
-            case 2: buscarPorNombre(e);
+            case 2: buscarPorNombre();
                 break;
             default:
                 System.out.println("Opción no válida");
         }
     }
 
-    public static void buscarPorId(Entidad e) {
+    public static void buscarPorId() {
         System.out.println("Introduzca el id a buscar:");
         long id = leerValorLong();
-        Llamada encontrada = e.buscarLlamada(id);
+        Llamada encontrada = Controlador.getSingleton().buscarLlamada(id);
         if(encontrada==null) {
             System.out.println("No hay ninguna llamada con ese Id");
         } else {
@@ -162,13 +169,13 @@ public class Main {
         }
     }
 
-    public static void buscarPorNombre(Entidad e) {
+    public static void buscarPorNombre() {
         System.out.println("Introduzca el nombre a buscar:");
         String nombre = leerValor("Nombre:");
         System.out.println("Desea buscar por origen (1) o por destinatario (2)");
         int opcion = leerValorInt();
         boolean bDestinatario = (opcion==2);
-        List<Llamada> encontradas = e.buscarLlamada(nombre,bDestinatario);
+        List<Llamada> encontradas = Controlador.getSingleton().buscarLlamada(nombre,bDestinatario);
         if(encontradas==null) {
             System.out.println("No hay ninguna llamada con " + nombre + " de destinatario == " + bDestinatario);
         } else {
@@ -179,23 +186,23 @@ public class Main {
         }
     }
 
-    private static void listarPersonasApeNombre(Entidad e) {
+    private static void listarPersonasApeNombre() {
         System.out.println(".................\nPersonas x Apellidos-Nombre:\n..............");
-        for(Persona p: e.getAllPersonas(null) ) {
+        for(Persona p: Controlador.getSingleton().getAllPersonas(null) ) {
             System.out.println(p.toString());
         }
     }
 
-    private static void listarPersonasEmail(Entidad e) {
+    private static void listarPersonasEmail() {
         System.out.println(".................\nPersonas x Email:\n..............");
-        for(Persona p: e.getAllPersonas(new ComparatorPersonaEmail()) ) {
+        for(Persona p: Controlador.getSingleton().getAllPersonas(new ComparatorPersonaEmail()) ) {
             System.out.println(p.toString());
         }
     }
 
-    private static void listarPersonasDni(Entidad e) {
+    private static void listarPersonasDni() {
         System.out.println(".................\nPersonas x Dni:\n..............");
-        for(Persona p: e.getAllPersonas( new Comparator<Persona>() {
+        for(Persona p: Controlador.getSingleton().getAllPersonas( new Comparator<Persona>() {
                 @Override
                 public int compare(Persona p1, Persona p2) {
                     return p1.getsDni().compareTo(p2.getsDni());
@@ -205,9 +212,9 @@ public class Main {
         }
     }
 
-    private static void listarPersonasApellidosNombreEmail(Entidad e) {
+    private static void listarPersonasApellidosNombreEmail() {
         System.out.println(".................\nPersonas x Dni:\n..............");
-        for(Persona p: e.getAllPersonas(  new Comparator<Persona>() {
+        for(Persona p: Controlador.getSingleton().getAllPersonas(  new Comparator<Persona>() {
             @Override
             public int compare(Persona p1, Persona p2) {
                 return p1.getsDni().compareTo(p2.getsDni());
@@ -217,9 +224,9 @@ public class Main {
         }
     }
 
-    private static void listarPersonasTelefono(Entidad e) {
+    private static void listarPersonasTelefono() {
         System.out.println(".................\nPersonas x Teléfono:\n..............");
-        for(Persona p: e.getAllPersonas(new Comparator<Persona>() {
+        for(Persona p: Controlador.getSingleton().getAllPersonas(new Comparator<Persona>() {
             @Override
             public int compare(Persona p1, Persona p2) {
                 return p1.getsTelefono().compareTo(p2.getsTelefono());

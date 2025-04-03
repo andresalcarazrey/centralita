@@ -1,4 +1,5 @@
-import java.lang.reflect.Array;
+package model;
+
 import java.util.*;
 // de manera automática. Pero fijaros,
                         //estamos usando API Java.
@@ -221,5 +222,15 @@ public class Entidad {
     }
 
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 }
